@@ -26,6 +26,13 @@
  - embedded the youtube video
  - made it autoplay and mute
  - we added tailwind classes make main container look awesome
+ - Build secondary component
+ - Build Movie List
+ - Build Movie cards
+ - Made browse page amazing with Tailwind CSS
+ - GPT search Page
+ - GPT Search bar
+ - (Amazing feature) Added multilingual support to GPT search page
 
 # Features
  - Signup/Login Page

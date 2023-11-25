@@ -7,12 +7,15 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
-import { LOGO } from "../utils/constants";
+import { LOGO, SUPPORTED_LANGUAGES } from "../utils/constants";
+import { toggleGptSearchView } from "../utils/gptSlice";
+import { changeLanguage } from "../utils/configSlice";
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
+  const gptSearch = useSelector((store) => store.gpt.showGptSearch);
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {})
@@ -20,7 +23,13 @@ const Header = () => {
         navigate("/error");
       });
   };
+  const handleGptSearchClick = () => {
+    dispatch(toggleGptSearchView());
+  };
 
+  const handleLanguageChange = (e) => {
+    dispatch(changeLanguage(e.target.value));
+  };
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -43,11 +52,18 @@ const Header = () => {
     //unsubscribe when component unmounts
     return () => unsubscribe();
   }, []);
+
   return (
     <div className="absolute z-30 w-full bg-gradient-to-b from-black flex justify-between">
       <img className="w-48 h-24 px-4 py-2" src={LOGO} alt="Logo" />
       {user && (
         <div className="flex">
+          <button
+            className="px-4 py-2 mx-2 my-auto rounded-lg m-2 bg-teal-700 text-white"
+            onClick={handleGptSearchClick}
+          >
+            {gptSearch ? "Homepage" : "Gpt Search"}
+          </button>
           <img
             className="w-12 h-12 mx-2 my-auto"
             src={user?.photoURL}
@@ -59,6 +75,18 @@ const Header = () => {
           >
             Sign Out
           </button>
+          {gptSearch && (
+            <select
+              className="p-2 bg-gray-700 text-white my-auto rounded-lg"
+              onChange={handleLanguageChange}
+            >
+              {SUPPORTED_LANGUAGES.map((lang) => (
+                <option key={lang.identifier} value={lang.identifier}>
+                  {lang.name}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
       )}
     </div>
