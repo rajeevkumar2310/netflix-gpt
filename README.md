@@ -33,6 +33,8 @@
  - GPT search Page
  - GPT Search bar
  - (Amazing feature) Added multilingual support to GPT search page
+ - onsubmit e.preventdefault()
+ - covered memoization
 
 # Features
  - Signup/Login Page
