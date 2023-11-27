@@ -54,10 +54,14 @@ const Header = () => {
   }, []);
 
   return (
-    <div className="absolute z-30 w-full bg-gradient-to-b from-black flex justify-between">
-      <img className="w-48 h-24 px-4 py-2" src={LOGO} alt="Logo" />
+    <div className="absolute z-30 w-full bg-gradient-to-b from-black flex flex-col md:flex-row justify-between">
+      <img
+        className="w-48 h-24 px-4 py-2 mx-auto md:mx-0"
+        src={LOGO}
+        alt="Logo"
+      />
       {user && (
-        <div className="flex">
+        <div className="flex justify-between md:justify-normal">
           <button
             className="px-4 py-2 mx-2 my-auto rounded-lg m-2 bg-teal-700 text-white"
             onClick={handleGptSearchClick}

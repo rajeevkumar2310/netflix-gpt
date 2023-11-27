@@ -85,14 +85,18 @@ const Login = () => {
     <div>
       <Header />
       <div className="absolute">
-        <img src={BACKGROUND_IMG_URL} alt="background" />
+        <img
+          className="h-screen md:w-screen object-cover"
+          src={BACKGROUND_IMG_URL}
+          alt="background"
+        />
       </div>
       <div className="p-36">
         <form
           onSubmit={(e) => {
             e.preventDefault();
           }}
-          className="absolute w-4/12 p-16 grid bg-black bg-opacity-80 rounded-md mx-auto right-0 left-0 text-white"
+          className="absolute w-5/6 md:w-4/12 p-8 grid bg-black bg-opacity-80 rounded-md mx-auto right-0 left-0 text-white"
         >
           <div className="p-4">
             <p className="font-bold text-2xl mb-8">

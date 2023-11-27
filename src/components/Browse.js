@@ -16,7 +16,7 @@ const Browse = () => {
   useUpcomingMovies();
   const gptSearch = useSelector((store) => store.gpt?.showGptSearch);
   return (
-    <div>
+    <div className="bg-black">
       <Header />
       {gptSearch ? (
         <GptSearch />

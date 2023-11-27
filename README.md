@@ -35,6 +35,11 @@
  - (Amazing feature) Added multilingual support to GPT search page
  - onsubmit e.preventdefault()
  - covered memoization
+  - By default is for mobile phones, md: is for desktops, sm: is for tablets
+  - Added .env file
+  - added .env file to git ignore
+ - made website responsive
+ - 
 
 # Features
  - Signup/Login Page

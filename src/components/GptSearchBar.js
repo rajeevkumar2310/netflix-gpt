@@ -1,15 +1,20 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import lang from "../utils/languageConstants";
-import openai from "../utils/openai";
+// import openai from "../utils/openai";
 import { API_OPTIONS } from "../utils/constants";
 import { loadGptMovieSuggestions } from "../utils/gptSlice";
 import GptMovieSuggestions from "./GptMovieSuggestions";
+import OpenAI from "openai";
+import { putApiKey } from "../utils/configSlice";
+// import { OPENAI_KEY } from "./constants";
 
 const GptSearchBar = () => {
   const language = useSelector((store) => store.config.lang);
   const movieSuggestions = useSelector((store) => store.gpt.gptMovies);
   const searchText = useRef(null);
+  const openaiKey = useRef(null);
+  const [shouldSearch, setShouldSearch] = useState(false);
   const dispatch = useDispatch();
   const searchMovieTMDB = async (movie) => {
     const data = await fetch(
@@ -22,8 +27,14 @@ const GptSearchBar = () => {
     return json.results;
   };
 
-  const handleGptSearchClick = async () => {
+  const handleOpenAiKeySubmitClick = async (openaiKey) => {
     //Make an API call to GPT API and get movie results
+    setShouldSearch(!shouldSearch);
+    dispatch(putApiKey(openaiKey));
+    const openai = new OpenAI({
+      apiKey: openaiKey,
+      dangerouslyAllowBrowser: true,
+    });
     const gptQuery =
       "Act as a movie recommendation system and suggest some movies for the query : " +
       searchText.current.value +
@@ -40,7 +51,6 @@ const GptSearchBar = () => {
 
     const tmdbResults = await Promise.all(promiseArray);
 
-    console.log("tmdb-results - ", tmdbResults);
     // dispatch(loadGptMovieNames(gptMovies));
     dispatch(
       loadGptMovieSuggestions({
@@ -49,10 +59,15 @@ const GptSearchBar = () => {
       })
     );
   };
+
+  const handleGptSearchClick = () => {
+    setShouldSearch(!shouldSearch);
+  };
+
   return (
-    <div className="pt-[10%]">
+    <div className="pt-[40%] md:pt-[10%]">
       <form
-        className="bg-black p-2 w-1/2 m-auto flex justify-between"
+        className="bg-black p-2 w-5/6 md:w-1/2 m-auto flex justify-between"
         onSubmit={(e) => e.preventDefault()}
       >
         <input
@@ -68,6 +83,22 @@ const GptSearchBar = () => {
           {lang[language].search}
         </button>
       </form>
+      {shouldSearch && (
+        <div className="bg-black p-2 w-5/6 md:w-1/2 m-auto flex justify-between">
+          <input
+            ref={openaiKey}
+            className="p-2 m-2 w-3/4 rounded-lg"
+            type="text"
+            placeholder={lang[language].openaiKeyInputPlaceHolder}
+          />
+          <button
+            className="bg-red-700 px-10 py-2 m-auto text-white rounded-lg"
+            onClick={() => handleOpenAiKeySubmitClick(openaiKey.current.value)}
+          >
+            {lang[language].search}
+          </button>
+        </div>
+      )}
       {movieSuggestions && <GptMovieSuggestions />}
     </div>
   );
